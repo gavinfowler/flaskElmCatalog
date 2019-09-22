@@ -6,8 +6,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
+es = Elasticsearch()
 
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'this-is-some-random-stuff-here'
@@ -84,11 +87,28 @@ class Products(Resource):
         p = Product(name=args.name,body=args.body,timestamp=datetime.now())
         db.session.add(p)
         db.session.commit()
-        print(args)
-        print(p)
+        doc = {
+            'id': p.id,
+            'body': p.body,
+            'name': p.name,
+            'timestamp': p.timestamp,
+        }
+        print(doc)
+        res = es.index(index="products", doc_type='product', id=p.id, body=doc)
+        print(res['result'])
 
     def get(self):
         products = Product.query.all()
+        res = es.search(index="products", body={
+            'query':{
+                'match_all':{}
+            }
+        })
+        hits = res['hits']['hits']
+        print('-----ES Hits------')
+        for i in hits:
+            print(i)
+        print('------------------')
         print(products)
         return jsonify(products=[e.serialize() for e in products])
 
