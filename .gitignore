@@ -4,3 +4,4 @@ server/api-copy.py
 app.db
 */__pycache__
 migrations/versions/__pycache__
+client/elm-stuff

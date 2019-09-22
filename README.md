@@ -6,3 +6,4 @@ links:
 
 [https://github.com/miguelgrinberg/REST-tutorial/blob/master/rest-server-v2.py](https://github.com/miguelgrinberg/REST-tutorial/blob/master/rest-server-v2.py)
 [https://blog.miguelgrinberg.com/post/restful-authentication-with-flask](https://blog.miguelgrinberg.com/post/restful-authentication-with-flask)
+[https://alligator.io/nodejs/solve-cors-once-and-for-all-netlify-dev/](https://alligator.io/nodejs/solve-cors-once-and-for-all-netlify-dev/)
