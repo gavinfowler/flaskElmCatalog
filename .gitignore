@@ -1,0 +1,6 @@
+venv/*
+server/api-copy.py
+.vscode
+app.db
+*/__pycache__
+migrations/versions/__pycache__
