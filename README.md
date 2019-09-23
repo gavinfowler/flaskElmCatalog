@@ -2,6 +2,12 @@
 
 This is a project to create a catalog with a Flask backend and an Elm frontend.
 
+Working state:
+
+* Run flask with api.py
+* Run elm with httpGet.elm
+* Run elasticsearch as normal
+
 ## Links
 
 ### Flask
