@@ -74,6 +74,30 @@ class Product(db.Model):
             'name': self.name,
             'timestamp': self.timestamp,
         }
+class Search(Resource):
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('query', type=str, location='json')
+        super(Search, self).__init__()
+
+    def get(self):
+        args = self.reqparse.parse_args()
+        print(args['query'])
+        res = es.search(index="products", body={
+            'query': {
+                'bool': {
+                    'should': [
+                        {'match': {'name': args['query']}},
+                        {'match': {'body': args['query']}},
+                    ]
+                }
+            }
+        })
+        hits = res['hits']['hits']
+        print('-----ES Hits------')
+        for i in hits:
+            print(i)
+        print('------------------')
 
 class Products(Resource):
     def __init__(self):
@@ -126,8 +150,9 @@ class Login(Resource):
 
 
 api.add_resource(Products, '/products', endpoint='products')
-# api.add_resource(TaskAPI, '/product/<int:id>', endpoint='product')
+# api.add_resource(Product, '/product/<int:id>', endpoint='product')
 api.add_resource(Login, '/login', endpoint='login')
+api.add_resource(Search, '/search', endpoint='search')
 
 
 if __name__ == '__main__':
