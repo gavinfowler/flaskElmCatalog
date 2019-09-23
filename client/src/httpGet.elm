@@ -103,7 +103,7 @@ viewProductsOrError model =
             viewError message
 
         Nothing ->
-            viewProducts model.stringProducts
+            viewProducts model.products
 
 viewError : String -> Html Msg
 viewError errorMessage =
@@ -116,16 +116,32 @@ viewError errorMessage =
         , text ("Error: " ++ errorMessage)
         ]
 
-viewProducts : List String -> Html Msg
-viewProducts products =
+viewStringProducts : List String -> Html Msg
+viewStringProducts products =
     div []
         [ h3 [] [ text "Products" ]
-        , ul [] (List.map viewProduct products)
+        , ul [] (List.map viewStringProduct products)
         ]
 
-viewProduct : String -> Html Msg
-viewProduct product =
+viewStringProduct : String -> Html Msg
+viewStringProduct product =
     li [] [ text product ]
+
+viewProducts : Maybe Products -> Html Msg
+viewProducts products =
+    case products of
+        Nothing ->
+            div [][ text "No products to display" ]
+
+        Just productList ->
+            div []
+                [ h3 [] [ text "Products" ]
+                , ul [] (List.map viewProduct productList.products)
+                ]
+
+viewProduct : Product -> Html Msg
+viewProduct product =
+    li [] [ text ("ID: " ++ (String.fromInt product.id) ++ " Name: " ++ product.name ++ " Body: " ++ product.body) ]
 
 buildErrorMessage : Http.Error -> String
 buildErrorMessage httpError =
